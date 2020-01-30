@@ -1,6 +1,8 @@
 import React from 'react';
 import fileData from './file.json';
 import currenyPairs from "./currencyPairs.json";
+import CurrencyDropdown from "./CurrencyDropdown";
+import CurrencyDropdownSecond from "./CurrencyDropdownSecond";
 import "./Conversion.css"
 
 class Conversions extends React.Component {
@@ -10,22 +12,23 @@ class Conversions extends React.Component {
 
         this.state = {
             totalData: '',
-            initialData: [],
+            // initialData: [],
             firstOption: '',
             secondOption: '',
             inputValue: '',
             currencyPairList: '',
             displayData: '',
-            errorMsg: ''
+            errorMsg: '',
+            emptyMsg: ''
         }
     }
 
 
     componentDidMount() {
-        let fileDatas = Object.keys(fileData)
+        // let fileDatas = Object.keys(fileData)
         this.setState({
             totalData: fileData,
-            initialData: fileDatas,
+            // initialData: fileDatas,
             currencyPairList: currenyPairs
         })
     }
@@ -38,14 +41,21 @@ class Conversions extends React.Component {
 
     handleSubmit = () => {
 
-        let firstOptionSelectedData = this.state.firstOption;
-        let secondOptionSelectedData = this.state.secondOption;
-        let secondSelectedObjectValue = '';
-        secondSelectedObjectValue = this.state.totalData[firstOptionSelectedData][secondOptionSelectedData]
-        this.startCalculation(secondSelectedObjectValue);
+        if (this.state.firstOption === '' && this.state.secondOption === '') {
+            this.setState({
+                emptyMsg: 'Please select a value'
+            })
+        } else {
+            let firstOptionSelectedData = this.state.firstOption;
+            let secondOptionSelectedData = this.state.secondOption;
+            let secondSelectedObjectValue = '';
+            secondSelectedObjectValue = this.state.totalData[firstOptionSelectedData][secondOptionSelectedData]
+            this.startCalculation(secondSelectedObjectValue);
+        }
     }
 
     startCalculation = (secondSelectedObjectValue) => {
+
         let concatSelectValue = this.state.firstOption.concat(this.state.secondOption);
 
         // * if the value in the table is equal to a Direct and Invert 
@@ -153,23 +163,26 @@ class Conversions extends React.Component {
         e.preventDefault()
     }
 
-    handleFirstOption = e => {
-        this.setState({
-            firstOption: e.target.value
-        })
+    updateDropdownFirstOption = (firstOption) => {
 
         this.setState({
-            errorMsg: ''
+            firstOption: firstOption
+        })
+        this.setState({
+            errorMsg: '',
+            emptyMsg: ''
         })
     }
 
-    handleSecondOption = e => {
+    updateDropdownSecondOption = (secondOption) => {
+
         this.setState({
-            secondOption: e.target.value
+            secondOption: secondOption
         })
 
         this.setState({
-            errorMsg: ''
+            errorMsg: '',
+            emptyMsg: ''
         })
     }
 
@@ -185,13 +198,11 @@ class Conversions extends React.Component {
             <div style={{ marginLeft: '550px', marginTop: '0px' }} >
                 <h1 style={{ marginLeft: "10px" }} >Currency Calculator</h1>
                 <h4 style={{ color: "red" }} >{this.state.errorMsg}</h4>
+                <h4 style={{ color: "red" }} >{this.state.emptyMsg}</h4>
                 <form onSubmit={this.formSubmit} >
                     <div>
-                        <label className="ui header" htmlFor="id_select" >From:</label>
-                        <select className="ui mini dropdown" defaultValue={'DEFAULT'} id="id_select" style={{ width: "auto", marginLeft: "20px" }} required onChange={this.handleFirstOption}>
-                            <option value="DEFAULT" disabled >Select</option>
-                            {this.state.initialData.map(val => <option key={val} value={val} >{val}</option>)}
-                        </select>
+                        <label className="ui header" >From:</label>
+                        <CurrencyDropdown triggerFirst={this.updateDropdownFirstOption} />
                         <span>
                             <div className="ui small input focus">
                                 <input placeholder="value..." onChange={this.updateInput} value={this.state.inputValue} style={{ marginLeft: "30px" }} type="number" required />
@@ -202,10 +213,8 @@ class Conversions extends React.Component {
                     <br />
                     <div>
                         <label className="ui header" htmlFor="id_select_second">To:</label>
-                        <select className="ui mini dropdown" defaultValue={'DEFAULT'} id="id_select_second" style={{ width: "auto", marginLeft: "42px" }} required onChange={this.handleSecondOption} >
-                            <option value="DEFAULT" disabled >Select</option>
-                            {this.state.initialData.map(val => <option key={val} value={val} >{val}</option>)}
-                        </select>
+                        <CurrencyDropdownSecond triggerSecond={this.updateDropdownSecondOption} />
+
 
                     </div>
                     <br />
