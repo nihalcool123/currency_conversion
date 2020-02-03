@@ -1,5 +1,7 @@
 import React from 'react';
 import fileData from './file.json';
+import PropTypes from "prop-types"
+
 
 
 class CurrencyDropdown extends React.Component {
@@ -21,9 +23,17 @@ class CurrencyDropdown extends React.Component {
 
     handleFirstOption = e => {
 
-        let firstVal = e.target.value
+        if (this.props.labelFirst === 'from') {
+            let firstVal = e.target.value
 
-        this.props.triggerFirst(firstVal)
+            this.props.triggerFirst(firstVal)
+        }
+
+        if (this.props.labelSecond === 'to') {
+            let secondVal = e.target.value
+
+            this.props.triggerSecond(secondVal)
+        }
     }
 
     render() {
@@ -34,6 +44,13 @@ class CurrencyDropdown extends React.Component {
             </select >
         )
     }
+}
+
+CurrencyDropdown.propTypes = {
+    labelFirst: PropTypes.string,
+    labelSecond: PropTypes.string,
+    triggerSecond: PropTypes.func,
+    triggerFirst: PropTypes.func
 }
 
 export default CurrencyDropdown;

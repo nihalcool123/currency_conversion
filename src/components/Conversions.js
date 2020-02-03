@@ -2,7 +2,6 @@ import React from 'react';
 import fileData from './file.json';
 import currenyPairs from "./currencyPairs.json";
 import CurrencyDropdown from "./CurrencyDropdown";
-import CurrencyDropdownSecond from "./CurrencyDropdownSecond";
 import "./Conversion.css"
 
 class Conversions extends React.Component {
@@ -19,7 +18,8 @@ class Conversions extends React.Component {
             currencyPairList: '',
             displayData: '',
             errorMsg: '',
-            emptyMsg: ''
+            emptyMsg: '',
+            // labelFirst: 'firstOption'
         }
     }
 
@@ -202,7 +202,7 @@ class Conversions extends React.Component {
                 <form onSubmit={this.formSubmit} >
                     <div>
                         <label className="ui header" >From:</label>
-                        <CurrencyDropdown triggerFirst={this.updateDropdownFirstOption} />
+                        <CurrencyDropdown triggerFirst={this.updateDropdownFirstOption} labelFirst="from" />
                         <span>
                             <div className="ui small input focus">
                                 <input placeholder="value..." onChange={this.updateInput} value={this.state.inputValue} style={{ marginLeft: "30px" }} type="number" required />
@@ -212,8 +212,8 @@ class Conversions extends React.Component {
                     </div>
                     <br />
                     <div>
-                        <label className="ui header" htmlFor="id_select_second">To:</label>
-                        <CurrencyDropdownSecond triggerSecond={this.updateDropdownSecondOption} />
+                        <label className="ui header" htmlFor="id_select_second" style={{ marginLeft: '22px' }} >To:</label>
+                        <CurrencyDropdown triggerSecond={this.updateDropdownSecondOption} labelSecond="to" />
 
 
                     </div>
@@ -225,7 +225,6 @@ class Conversions extends React.Component {
                     <br /> <br /> <br />
                     {DisplayResult}
                 </form>
-
             </div>
         )
     }
